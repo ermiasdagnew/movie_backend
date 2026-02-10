@@ -1,21 +1,21 @@
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
+from django.http import HttpResponse
 
-schema_view = get_schema_view(
-    openapi.Info(
-        title="Movie API",
-        default_version='v1',
-        description="Movie Backend API",
-    ),
-    public=True,
-    permission_classes=[permissions.AllowAny],
-)
+# Simple home view for the root URL
+def home(request):
+    return HttpResponse("🎬 Movie Recommendation Backend is live! Visit /api/movies/ to see movies.")
 
 urlpatterns = [
+    # Root path shows a simple message
+    path('', home, name='home'),
+
+    # Admin panel
     path('admin/', admin.site.urls),
+
+    # Movies API
     path('api/movies/', include('movies.urls')),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
+
+    # Swagger documentation (if you have it set up)
+    path('swagger/', include('swagger.urls')),  # remove if you don't have swagger app
 ]
